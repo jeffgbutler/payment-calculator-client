@@ -59,7 +59,12 @@ new Vue({
       let years = 30;
   
       fetch(`${this.baseURL}/payment?amount=${amount}&rate=${rate}&years=${years}`, {method: 'GET'})
-      .then((res) => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Received response ${res.status}`)
+        }
+        return res.json();
+      })
       .then((data) => {
         this.addPayment(data);
       })

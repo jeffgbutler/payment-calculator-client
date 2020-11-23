@@ -13,6 +13,10 @@
             <label for="urlBox">Base URL</label>
             <input class="form-control" id="urlBox" type="text" v-model="baseURL" />
           </div>
+          <div class="form-group">
+            <label for="frequency">Delay in Milliseconds</label>
+            <input class="form-control" id="frequency" type="text" v-model="frequency" />
+          </div>
         </form>
         <div>
           <button class="btn btn-primary" @click="start" v-bind:disabled="startDisabled">Start</button>

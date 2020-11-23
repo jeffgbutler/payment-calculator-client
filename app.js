@@ -4,7 +4,8 @@ new Vue({
     started: false,
     paymentHistory: [],
     errorHistory: [],
-    baseURL: "http://localhost:8080"
+    baseURL: "http://localhost:8080",
+    frequency: 1000
   },
   computed: {
     startDisabled: function() {
@@ -30,7 +31,7 @@ new Vue({
       this.errorHistory = [];
     },
     scheduleUpdate: function() {
-      setTimeout(() => this.getPayment(), 1000);
+      setTimeout(() => this.getPayment(), this.frequency);
     },
     addError: function(request, err) {
       this.errorHistory.unshift({

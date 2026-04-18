@@ -4,31 +4,47 @@
     <title>Payment Service Traffic Simulator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
   </head>
-  <body>
-    <div class="container-fluid">
-      <h1>Payment Service Traffic Simulator</h1>
-      <div id="app">
-        <form>
-          <div class="mb-3">
-            <label for="urlBox">Base URL</label>
-            <input class="form-control" id="urlBox" type="text" v-model="baseURL" />
-          </div>
-          <div class="mb-3">
-            <label for="frequency">Delay in Milliseconds: {{frequency}}ms</label>
-            <input class="form-range" id="frequency" type="range" min="10" max="1000" step="10" v-model.number="frequency" />
-          </div>
-        </form>
-        <div class="d-flex gap-2">
-          <button class="btn btn-primary" @click="start" v-bind:disabled="startDisabled">Start</button>
-          <button class="btn btn-primary" @click="stop" v-bind:disabled="!started">Stop</button>
-          <button class="btn btn-primary" @click="clear">Clear History</button>
-          <button class="btn btn-primary" @click="resetCount">Reset Count</button>
-          <button class="btn btn-danger" @click="crashIt">Crash It!</button>
-        </div>
+  <body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary mb-4 shadow-sm">
+      <div class="container">
+        <span class="navbar-brand fw-semibold">Payment Service Traffic Simulator</span>
+      </div>
+    </nav>
 
-        <div v-if="hasPaymentHistory">
-          <h2>Payment History</h2>
-          <table class="table table-striped">
+    <div class="container" id="app">
+
+      <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span class="fw-semibold">Configuration</span>
+          <span class="badge" :class="started ? 'bg-success' : 'bg-secondary'">
+            {{ started ? 'Running' : 'Stopped' }}
+          </span>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <label for="urlBox" class="form-label">Base URL</label>
+              <input class="form-control" id="urlBox" type="text" v-model="baseURL" />
+            </div>
+            <div class="mb-3">
+              <label for="frequency" class="form-label">Delay: {{frequency}}ms</label>
+              <input class="form-range" id="frequency" type="range" min="10" max="1000" step="10" v-model.number="frequency" />
+            </div>
+          </form>
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-success" @click="start" :disabled="startDisabled">Start</button>
+            <button class="btn btn-secondary" @click="stop" :disabled="!started">Stop</button>
+            <button class="btn btn-outline-secondary" @click="clear">Clear History</button>
+            <button class="btn btn-outline-secondary" @click="resetCount">Reset Count</button>
+            <button class="btn btn-danger ms-auto" @click="crashIt">Crash It!</button>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="hasPaymentHistory" class="card shadow-sm mb-4">
+        <div class="card-header fw-semibold">Payment History</div>
+        <div class="card-body p-0">
+          <table class="table table-striped table-hover mb-0">
             <thead class="table-light">
               <tr>
                 <th>Amount</th>
@@ -53,10 +69,12 @@
             </tbody>
           </table>
         </div>
+      </div>
 
-        <div v-if="hasErrors">
-          <h2>Error History</h2>
-          <table class="table table-striped">
+      <div v-if="hasErrors" class="card shadow-sm mb-4 border-danger">
+        <div class="card-header fw-semibold text-danger">Error History</div>
+        <div class="card-body p-0">
+          <table class="table table-striped table-hover mb-0">
             <thead class="table-light">
               <tr>
                 <th>Request</th>
@@ -66,15 +84,17 @@
             </thead>
             <tbody>
               <tr v-for="error in errorHistory">
-                <td valign="top">{{ error.request }}</td>
-                <td valign="top">{{ error.message }}</td>
-                <td valign="top">{{ error.timestamp }}</td>
+                <td class="align-top">{{ error.request }}</td>
+                <td class="align-top text-danger">{{ error.message }}</td>
+                <td class="align-top">{{ error.timestamp }}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@3.5.32/dist/vue.global.js"></script>
     <script src="app.js"></script>

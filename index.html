@@ -14,8 +14,8 @@
             <input class="form-control" id="urlBox" type="text" v-model="baseURL" />
           </div>
           <div class="mb-3">
-            <label for="frequency">Delay in Milliseconds</label>
-            <input class="form-control" id="frequency" type="text" v-model="frequency" />
+            <label for="frequency">Delay in Milliseconds: {{frequency}}ms</label>
+            <input class="form-range" id="frequency" type="range" min="10" max="1000" step="10" v-model.number="frequency" />
           </div>
         </form>
         <div class="d-flex gap-2">

@@ -9,6 +9,9 @@ Vue.createApp({
     };
   },
   computed: {
+    normalizedBaseURL: function() {
+      return this.baseURL.replace(/\/+$/, '');
+    },
     startDisabled: function() {
       return this.started || this.baseURL === "";
     },
@@ -60,7 +63,7 @@ Vue.createApp({
       amount = Math.floor(amount * 100.0) / 100.0; // force 2 decimal digits
       let years = 30;
   
-      fetch(`${this.baseURL}/payment?amount=${amount}&rate=${rate}&years=${years}`, {method: 'GET'})
+      fetch(`${this.normalizedBaseURL}/payment?amount=${amount}&rate=${rate}&years=${years}`, {method: 'GET'})
       .then(res => {
         if (!res.ok) {
           throw new Error(`Received response ${res.status}`)
@@ -80,13 +83,13 @@ Vue.createApp({
       });
     },
     crashIt: function() {
-      fetch(`${this.baseURL}/crash`, {method: 'GET'})
+      fetch(`${this.normalizedBaseURL}/crash`, {method: 'GET'})
       .catch((err) => {
         this.addError('Crash Request', err);
       });
     },
     resetCount() {
-      fetch(`${this.baseURL}/resetCount`, {method: 'GET'})
+      fetch(`${this.normalizedBaseURL}/resetCount`, {method: 'GET'})
       .catch((err) => {
         this.addError('Reset Count Request', err);
       });

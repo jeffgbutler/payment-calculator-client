@@ -1,11 +1,12 @@
-new Vue({
-  el: "#app",
-  data: {
-    started: false,
-    paymentHistory: [],
-    errorHistory: [],
-    baseURL: "http://localhost:8080",
-    frequency: 1000
+Vue.createApp({
+  data() {
+    return {
+      started: false,
+      paymentHistory: [],
+      errorHistory: [],
+      baseURL: "http://localhost:8080",
+      frequency: 1000
+    };
   },
   computed: {
     startDisabled: function() {
@@ -91,4 +92,4 @@ new Vue({
       });
     }
   }
-});
+}).mount('#app');

@@ -99,8 +99,22 @@
 
     </div>
 
+    <script type="importmap">
+    {
+      "imports": {
+        "@opentelemetry/api": "https://esm.sh/@opentelemetry/api@1.9.0",
+        "@opentelemetry/sdk-trace-base": "https://esm.sh/@opentelemetry/sdk-trace-base@1.26.0",
+        "@opentelemetry/sdk-trace-web": "https://esm.sh/@opentelemetry/sdk-trace-web@1.26.0",
+        "@opentelemetry/exporter-trace-otlp-http": "https://esm.sh/@opentelemetry/exporter-trace-otlp-http@0.53.0",
+        "@opentelemetry/resources": "https://esm.sh/@opentelemetry/resources@1.26.0",
+        "@opentelemetry/instrumentation": "https://esm.sh/@opentelemetry/instrumentation@0.53.0",
+        "@opentelemetry/instrumentation-fetch": "https://esm.sh/@opentelemetry/instrumentation-fetch@0.53.0"
+      }
+    }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@3.5.32/dist/vue.global.js"></script>
-    <script src="app.js"></script>
+    <script type="module" src="otel.js"></script>
+    <script type="module" src="app.js"></script>
   </body>
 </html>

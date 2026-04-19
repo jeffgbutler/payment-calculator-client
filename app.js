@@ -1,3 +1,7 @@
+import { trace } from '@opentelemetry/api';
+
+const tracer = trace.getTracer('payment-calculator-client');
+
 Vue.createApp({
   data() {
     return {
@@ -59,29 +63,43 @@ Vue.createApp({
       this.paymentHistory = this.paymentHistory.slice(0, 5);
     },
     getPayment: function() {
-      let rate = Math.floor(Math.random() * 7); // random integer 0..6
-      let amount = 100000.0 + Math.random() * 700000.00; // random between 100,000.00 and 700,000.00
-      amount = Math.floor(amount * 100.0) / 100.0; // force 2 decimal digits
+      let rate = Math.floor(Math.random() * 7);
+      let amount = 100000.0 + Math.random() * 700000.00;
+      amount = Math.floor(amount * 100.0) / 100.0;
       let years = 30;
-  
-      const chaoticParam = this.chaotic ? '&chaotic=true' : '';
-      fetch(`${this.normalizedBaseURL}/payment?amount=${amount}&rate=${rate}&years=${years}${chaoticParam}`, {method: 'GET'})
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`Received response ${res.status}`)
-        }
-        return res.json();
-      })
-      .then((data) => {
-        this.addPayment(data);
-      })
-      .catch((err) => {
-        this.addError(`Details: a=${amount}, r=${rate}, y=${years}`, err);
-      })
-      .then(() => {
-        if (this.started) {
-          this.scheduleUpdate();
-        }
+
+      tracer.startActiveSpan('payment.request', {
+        attributes: {
+          'payment.amount': amount,
+          'payment.rate': rate,
+          'payment.years': years,
+          'payment.chaotic': this.chaotic,
+        },
+      }, (span) => {
+        const chaoticParam = this.chaotic ? '&chaotic=true' : '';
+        fetch(`${this.normalizedBaseURL}/payment?amount=${amount}&rate=${rate}&years=${years}${chaoticParam}`, {method: 'GET'})
+        .then(res => {
+          if (!res.ok) {
+            span.setAttribute('error', true);
+            throw new Error(`Received response ${res.status}`)
+          }
+          return res.json();
+        })
+        .then((data) => {
+          span.setAttribute('payment.result', data.payment);
+          this.addPayment(data);
+        })
+        .catch((err) => {
+          span.setAttribute('error', true);
+          span.recordException(err);
+          this.addError(`Details: a=${amount}, r=${rate}, y=${years}`, err);
+        })
+        .finally(() => {
+          span.end();
+          if (this.started) {
+            this.scheduleUpdate();
+          }
+        });
       });
     },
     crashIt: function() {

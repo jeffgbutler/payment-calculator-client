@@ -30,6 +30,10 @@
               <label for="frequency" class="form-label">Delay: {{frequency}}ms</label>
               <input class="form-range" id="frequency" type="range" min="10" max="1000" step="10" v-model.number="frequency" />
             </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" id="chaotic" type="checkbox" v-model="chaotic" />
+              <label class="form-check-label" for="chaotic">Chaotic</label>
+            </div>
           </form>
           <div class="d-flex flex-wrap gap-2">
             <button class="btn btn-success" @click="start" :disabled="startDisabled">Start</button>

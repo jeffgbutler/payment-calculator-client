@@ -2,6 +2,7 @@ Vue.createApp({
   data() {
     return {
       started: false,
+      chaotic: false,
       paymentHistory: [],
       errorHistory: [],
       baseURL: "http://localhost:8080",
@@ -63,7 +64,8 @@ Vue.createApp({
       amount = Math.floor(amount * 100.0) / 100.0; // force 2 decimal digits
       let years = 30;
   
-      fetch(`${this.normalizedBaseURL}/payment?amount=${amount}&rate=${rate}&years=${years}`, {method: 'GET'})
+      const chaoticParam = this.chaotic ? '&chaotic=true' : '';
+      fetch(`${this.normalizedBaseURL}/payment?amount=${amount}&rate=${rate}&years=${years}${chaoticParam}`, {method: 'GET'})
       .then(res => {
         if (!res.ok) {
           throw new Error(`Received response ${res.status}`)
